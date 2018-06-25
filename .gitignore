@@ -1,0 +1,24 @@
+.DS_Store
+Desktop.ini
+
+application/cache/*
+application/logs/*
+
+/vendor/
+/gcloud/
+
+app.yaml*
+cron.yaml*
+dispatch.yaml*
+index.yaml*
+nginx-*.conf
+
+# composer
+#-------------------------
+composer.lock
+
+# IDE Files
+#-------------------------
+.project
+.settings
+

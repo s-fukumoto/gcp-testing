@@ -1,0 +1,12 @@
+runtime: php
+env: flex
+
+service: XXXXXXXXX-dev
+
+threadsafe: false
+
+runtime_config:
+  document_root: public
+
+env_variables:
+  CI_ENV: development
