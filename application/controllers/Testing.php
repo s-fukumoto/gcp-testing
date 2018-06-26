@@ -14,31 +14,13 @@ class Testing extends CI_Controller {
     private const GCS_OBJECT_NAME = 'parts_test.html';
 
     /**
-     * Cloud Storage
-     * @var Google\Cloud\Storage\StorageClient
-     */
-    protected $_storage = null;
-
-    /**
-     * Cloud Datastore
-     * @var Google\Cloud\Storage\StorageClient
-     */
-    protected $_datastore = null;
-
-    /**
      * コンストラクタ
      *
      * @return void
      */
     public function __construct() {
         parent::__construct();
-        
-        // Google Cloud
-        $config = [
-            'keyFilePath' => $this->config->item('keyFilePath', 'gcloud') ?? ''
-        ];
-        $this->_storage = new StorageClient($config);
-        $this->_datastore = new DatastoreClient($config);
+        $this->load->library('gcloud');
     }
 
     /**
@@ -48,7 +30,7 @@ class Testing extends CI_Controller {
     {
         // Cloud Strage から静的パーツを取り込む
         $contents = '';
-        $bucket = $this->_storage->bucket(self::GCS_BUCKET_NAME);
+        $bucket = $this->gcp->storage->bucket(self::GCS_BUCKET_NAME);
         if ($bucket->exists()) {
             $object = $bucket->object(self::GCS_OBJECT_NAME);
             if ($object->exists()) {
@@ -62,16 +44,16 @@ class Testing extends CI_Controller {
 
         // Datastore へ閲覧数書き込み
         $count = 1;
-        $key = $this->_datastore->key('AccessInfo', 'count');
-        $accessInfo = $this->_datastore->lookup($key);
+        $key = $this->gcp->datastore->key('AccessInfo', 'count');
+        $accessInfo = $this->gcp->datastore->lookup($key);
         if ($accessInfo) {
             $count = $accessInfo['value'] + 1;
             $accessInfo['value'] = $count;
-            $this->_datastore->update($accessInfo);
+            $this->gcp->datastore->update($accessInfo);
         } else {
-            $accessInfo = $this->_datastore->entity($key);
+            $accessInfo = $this->gcp->datastore->entity($key);
             $accessInfo['value'] = 1;
-            $this->_datastore->insert($accessInfo);
+            $this->gcp->datastore->insert($accessInfo);
         }
 
         // View
