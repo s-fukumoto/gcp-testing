@@ -239,8 +239,8 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-//$config['log_path'] = '';
-$config['log_path'] = APPPATH.'logs/';
+$config['log_path'] = '';
+//$config['log_path'] = APPPATH.'logs/';
 
 /*
 |--------------------------------------------------------------------------
@@ -289,8 +289,7 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 | application/views/errors/ directory.  Use a full server path with trailing slash.
 |
 */
-//$config['error_views_path'] = '';
-$config['error_views_path'] = VIEWPATH.'errors/';
+$config['error_views_path'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -301,8 +300,7 @@ $config['error_views_path'] = VIEWPATH.'errors/';
 | application/cache/ directory.  Use a full server path with trailing slash.
 |
 */
-//$config['cache_path'] = '';
-$config['cache_path'] = APPPATH.'cache/';
+$config['cache_path'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -530,14 +528,3 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
-
-
-
-/*
- * Google Cloud Platform
- */
-$config['gcloud'] = [
-    'keyFilePath' => realpath(APPPATH.'../gcloud/key/app-service.json'), // アクセスキーファイル
-];
-
-
