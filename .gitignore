@@ -1,8 +1,11 @@
 .DS_Store
 Desktop.ini
 
-application/cache/*
+application/cache/sessions/*
+application/cache/twig/*
 application/logs/*
+
+!.empty
 
 /vendor/
 /gcloud/

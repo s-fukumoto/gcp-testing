@@ -41,7 +41,7 @@ class Member extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->library(['gcp', 'twig']);
+        $this->load->library(['session', 'gcp', 'twig']);
     }
 
     /**
@@ -49,13 +49,13 @@ class Member extends CI_Controller {
      */
     public function index()
     {
-        // 仮データ
+        // sessionから取得
         $member = [
-            'name' => '山田 太郎',
-            'email' => 'yama@cevcsfesbdv.com',
-            'age' => '20',
-            'gender' => 'm',
-            'memo' => 'ｍｅｍｏ５６７８９０１２３４５６７８９０１２３４５６７８９０',
+            'name' => $_SESSION['name'] ?? '',
+            'email' => $_SESSION['email'] ?? '',
+            'age' => $_SESSION['age'] ?? '',
+            'gender' => $_SESSION['gender'] ?? '',
+            'memo' => $_SESSION['memo'] ?? '',
         ];
 
         // View(Twig)
@@ -75,10 +75,17 @@ class Member extends CI_Controller {
         $member = [
             'name' => $this->input->post('name', TRUE),
             'email' => $this->input->post('email', TRUE),
-            'age' => $this->_get_label($this->input->post('age', TRUE), self::AGE_INFO_LIST),
-            'gender' => $this->_get_label($this->input->post('gender', TRUE), self::GENDER_INFO_LIST),
+            'age' => $this->input->post('age', TRUE),
+            'gender' => $this->input->post('gender', TRUE),
             'memo' => $this->input->post('memo', TRUE),
         ];
+
+        // sessionへ保存
+        $this->session->set_userdata($member);
+
+        // View表示用の名称へ変更
+        $member['age'] = $this->_get_label($this->input->post('age', TRUE), self::AGE_INFO_LIST);
+        $member['gender'] = $this->_get_label($this->input->post('gender', TRUE), self::GENDER_INFO_LIST);
 
         // View(Twig)
         $this->twig->view('member_complete', ['member' => $member]);
