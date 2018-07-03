@@ -227,8 +227,8 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
-//$config['log_threshold'] = 4;
+//$config['log_threshold'] = 0;
+$config['log_threshold'] = 4;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,8 +239,8 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
-//$config['log_path'] = APPPATH.'logs/';
+//$config['log_path'] = '';
+$config['log_path'] = APPPATH.'logs/';
 
 /*
 |--------------------------------------------------------------------------
@@ -384,6 +384,7 @@ $config['encryption_key'] = '';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
+/*
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
@@ -391,6 +392,36 @@ $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
+*/
+
+/*
+ * files driver
+ *//*
+$config['sess_driver'] = 'files';
+$config['sess_cookie_name'] = 'ci_session';
+$config['sess_expiration'] = 7200;
+$config['sess_save_path'] = APPPATH.'cache/sessions/';
+$config['sess_match_ip'] = FALSE;
+$config['sess_time_to_update'] = 300;
+$config['sess_regenerate_destroy'] = FALSE;
+*/
+
+/*
+ * datastore (Google Cloud Pratform) driver
+ * 
+ * sess_save_path には Google Cloud Pratform で作成したサービスアカウントのキーファイルの格納先を指定してください
+ * サービスアカウントのキーファイルの作成方法は以下参照
+ * https://cloud.google.com/docs/authentication/getting-started
+ */
+$config['sess_driver'] = 'datastore';
+$config['sess_cookie_name'] = 'ci_session';
+$config['sess_expiration'] = 7200;
+$config['sess_save_path'] = realpath(APPPATH.'../gcloud/key/app-service.json');
+$config['sess_match_ip'] = FALSE;
+$config['sess_time_to_update'] = 300;
+$config['sess_regenerate_destroy'] = FALSE;
+$config['sess_entity_name'] = 'ci_session';
+$config['sess_serialize_handler'] = 'php_serialize';
 
 /*
 |--------------------------------------------------------------------------

@@ -1,8 +1,6 @@
 runtime: php
 env: flex
 
-service: XXXXXXXXX-dev
-
 threadsafe: false
 
 runtime_config:
