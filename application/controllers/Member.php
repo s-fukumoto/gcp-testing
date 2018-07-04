@@ -81,7 +81,9 @@ class Member extends CI_Controller {
         ];
 
         // sessionへ保存
-        $this->session->set_userdata($member);
+        foreach ($member as $key => &$value) {
+            $_SESSION[$key] = $value;
+        }
 
         // View表示用の名称へ変更
         $member['age'] = $this->_get_label($this->input->post('age', TRUE), self::AGE_INFO_LIST);
