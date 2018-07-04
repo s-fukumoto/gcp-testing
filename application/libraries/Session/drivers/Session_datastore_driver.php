@@ -1,4 +1,6 @@
 <?php
+use function GuzzleHttp\json_encode;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -153,7 +155,7 @@ class CI_Session_datastore_driver extends CI_Session_driver implements SessionHa
             $this->_fingerprint = md5($session_data);
             return $this->_success;
 
-        } catch (DomainException $e) {
+        } catch (Exception $e) {
             log_message('error', 'Session: Got DatastoreException on write(): '.$e->getMessage());
         }
 
@@ -221,20 +223,25 @@ class CI_Session_datastore_driver extends CI_Session_driver implements SessionHa
      */
     public function gc($maxlifetime)
     {
-        $transaction = $this->_datastore->transaction();
         $query = $this->_datastore->query()
-            ->kind($this->_config['save_path'])
+            ->kind($this->_config['entity_name'])
             ->filter('timestamp', '<', (time() - $maxlifetime))
             ->keysOnly();
 
-        $keys = $this->_datastore->runQuery($query);
+        $entities = $this->_datastore->runQuery($query);
 
-        try {
-            $this->_datastore->deleteBatch($keys, ['tranzaction' => $transaction]);
+        if ($entities !== FALSE) {
+
+            foreach ($entities as $k => $entity) {
+                try {
+                    $this->_datastore->delete($entity->key());
+                    log_message('debug', 'Session: Delete was completed on gc(): key: '.$entity->key());
+                } catch (Exception $e) {
+                    log_message('error', 'Session: Got DatastoreException on gc() key: '.$entity->key().' :'.$e->getMessage());
+                }
+            }
+
             return $this->_success;
-
-        } catch (Exception $e) {
-            log_message('error', 'Session: Got DatastoreException on gc(): '.$e->getMessage());
         }
 
         return $this->_fail();
