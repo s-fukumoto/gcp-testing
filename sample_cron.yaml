@@ -1,0 +1,5 @@
+cron:
+- description: "A session information that expired is released"
+  url: /batch/session/release
+  schedule: every 2 hours from 09:00 to 21:00
+  timezone: Asia/Tokyo
