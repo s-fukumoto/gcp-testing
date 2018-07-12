@@ -8,3 +8,15 @@ runtime_config:
 
 env_variables:
   CI_ENV: development
+
+skip_files:
+- ^app\.yaml\..*
+- ^cron\.yaml\..*
+- ^sample_\..*\.yaml\..*
+- ^dispatch\.yaml\..*
+- ^index\.yaml\..*
+- ^README\..*
+- ^(.*/)?composer\.(phar|lock)$
+- \.gitignore
+- ^vender\/.*
+- ^gcloud\/.*
