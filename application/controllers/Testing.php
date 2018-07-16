@@ -48,13 +48,11 @@ class Testing extends CI_Controller {
         $accessInfo = $this->gcp->datastore->lookup($key);
         if ($accessInfo) {
             $count = $accessInfo['value'] + 1;
-            $accessInfo['value'] = $count;
-            $this->gcp->datastore->update($accessInfo);
         } else {
             $accessInfo = $this->gcp->datastore->entity($key);
-            $accessInfo['value'] = 1;
-            $this->gcp->datastore->insert($accessInfo);
         }
+        $accessInfo['value'] = $count;
+        $this->gcp->datastore->upsert($accessInfo);
 
         // View
         $this->load->view('testing', ['contents' => $contents ?? '', 'access_count' => (float)$count]);
