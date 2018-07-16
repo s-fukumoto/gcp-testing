@@ -46,7 +46,12 @@ class Gcp {
             'keyFilePath' => $this->_ci->config->item('keyFilePath', self::GOOGLE_CLOUD_CONFIG_FILE) ?? ''
         ];
 
-        $this->storage = new StorageClient($this->_conf);
-        $this->datastore = new DatastoreClient($this->_conf);
+        $storage_conf = $this->_conf;
+        $this->storage = new StorageClient($storage_conf);
+
+        $datastore_conf = $this->_conf + [
+            'namespaceId' => 'data_'.date('Ymd')
+        ];
+        $this->datastore = new DatastoreClient($datastore_conf);
     }
 }
