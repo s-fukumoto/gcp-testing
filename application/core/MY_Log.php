@@ -78,7 +78,8 @@ class MY_Log extends CI_Log {
 		// Stackdriver Logging,Logger 生成
 		if ($this->_use_stackdriver === TRUE) {
 			$this->_logging = new LoggingClient(empty($this->_project_id) ? [] : ['projectId' => $this->_project_id]);
-			$this->_logger[$this->_logger_name] = $this->_logging->logger($this->_logger_name);
+			//$this->_logger[$this->_logger_name] = $this->_logging->logger($this->_logger_name);
+			$this->_logger[$this->_logger_name] = $this->_logging->psrBatchLogger($this->_logger_name);
 		}
 	}
 
@@ -111,7 +112,8 @@ class MY_Log extends CI_Log {
 
 		// 生成済みでなければ生成する
 		if ( ! isset($this->_logger[$logger_name])) {
-			$this->_logger[$logger_name] = $this->_logging->logger($logger_name);
+			//$this->_logger[$logger_name] = $this->_logging->logger($logger_name);
+			$this->_logger[$logger_name] = $this->_logging->psrLogger($logger_name);
 		}
 
 		// 名称を変更して返す
@@ -166,7 +168,9 @@ class MY_Log extends CI_Log {
 
 		// log書き込み
 		$logger = $this->_logger[$this->_logger_name];
-		$logger->write($logger->entry($msg), ['severity' => $level]);
+		//$logger->write($logger->entry($msg), ['severity' => $level]);
+		$msg = is_array($msg) ? json_encode($msg) : $msg;
+		$logger->log($level, $msg);
 
 		return TRUE;
 	}
