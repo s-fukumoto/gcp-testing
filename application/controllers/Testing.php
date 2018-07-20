@@ -54,6 +54,26 @@ class Testing extends CI_Controller {
         $accessInfo['value'] = $count;
         $this->gcp->datastore->upsert($accessInfo);
 
+        // Log 書き込み(log_message)
+        log_message('error', '*** LOG TEST [log_message] *** (ERROR)');
+        log_message('warning', '*** LOG TEST [log_message] *** (WARNING)');
+        log_message('debug', '*** LOG TEST [log_message] *** (DEBUG)');
+        log_message('info', '*** LOG TEST [log_message] *** (INFO)');
+
+        // Log 書き込み(Controllerで使う場合こちらも可)
+        // こちらは、配列形式のメッセージもOK(stackdriverのjsonPayloadに対応)
+        $this->log->error('*** LOG TEST [log class] *** (ERROR)');
+        $this->log->error('*** LOG TEST [log class] *** (ERROR - other-app)', 'other-app');
+        $this->log->warning('*** LOG TEST [log class] *** (WARNING)');
+        $this->log->debug('*** LOG TEST [log class] *** (DEBUG)');
+        $this->log->info('*** LOG TEST [log class] *** (INFO)');
+        $test_data = [
+            'id' => 123,
+            'name' => 'abc',
+            'item' => ['ZAQ', 'XSW', 'CDE'],
+        ];
+        $this->log->debug(['msg' => '*** LOG TEST [log class] *** (DEBUG - jsonPayload)', 'data' => $test_data]);
+
         // View
         $this->load->view('testing', ['contents' => $contents ?? '', 'access_count' => (float)$count]);
     }

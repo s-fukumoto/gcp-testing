@@ -228,7 +228,7 @@ $config['allow_get_array'] = TRUE;
 |
 */
 //$config['log_threshold'] = 0;
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 5;
 
 /*
 |--------------------------------------------------------------------------
@@ -559,3 +559,35 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+/*
+|==========================================================================
+| Project Config
+|==========================================================================
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Google Cloud Platform
+|--------------------------------------------------------------------------
+*/
+
+/*
+ * 共通設定
+ */
+$config['gcp_project_id'] = getenv('GOOGLE_PROJECT_ID');
+
+/*
+ *  Datastore 設定
+ */
+$config['gcp_datatore_name_space'] = 'data_'.date('Ymd'); // 名前空間指定
+
+/*
+ * Stackdriver Logging 設定
+ * 
+ * https://cloud.google.com/logging/docs/setup/php?hl=ja
+ */
+$config['gcp_log_use_stackdriver'] = TRUE; // Stackdriver Logging の使用可否
+$config['gcp_log_use_psr'] = TRUE; // Stackdriver Logging の使用可否
+$config['gcp_logger_name_prefix'] = 'my-app'; // Stackdriver logger 名称の接頭文字
