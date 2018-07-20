@@ -5,6 +5,7 @@ threadsafe: false
 
 runtime_config:
   document_root: public
+  enable_stackdriver_integration: true
 
 env_variables:
   CI_ENV: development
