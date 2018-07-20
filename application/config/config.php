@@ -590,4 +590,4 @@ $config['gcp_datatore_name_space'] = 'data_'.date('Ymd'); // 名前空間指定
  */
 $config['gcp_log_use_stackdriver'] = TRUE; // Stackdriver Logging の使用可否
 $config['gcp_log_use_psr'] = TRUE; // Stackdriver Logging の使用可否
-$config['gcp_logger_name_prefix'] = 'my-app'; // Stackdriver logger 名称の接頭文字
+$config['gcp_logger_name'] = 'my-app'; // Stackdriver logger 名称
