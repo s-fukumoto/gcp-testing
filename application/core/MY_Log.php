@@ -45,7 +45,7 @@ class MY_Log extends CI_Log {
 	/**
 	 * Stackdriver Logger インスタンス
 	 *
-	 * @var	array(Google\Cloud\Logging\Logger)
+	 * @var	array(Google\Cloud\Logging\PsrLogger)
 	 */
 	protected $_logger = [];
 
@@ -78,7 +78,6 @@ class MY_Log extends CI_Log {
 		// Stackdriver Logging,Logger 生成
 		if ($this->_use_stackdriver === TRUE) {
 			$this->_logging = new LoggingClient(empty($this->_project_id) ? [] : ['projectId' => $this->_project_id]);
-			//$this->_logger[$this->_logger_name] = $this->_logging->logger($this->_logger_name);
 			$this->_logger[$this->_logger_name] = $this->_logging->psrBatchLogger($this->_logger_name);
 		}
 	}
@@ -112,7 +111,6 @@ class MY_Log extends CI_Log {
 
 		// 生成済みでなければ生成する
 		if ( ! isset($this->_logger[$logger_name])) {
-			//$this->_logger[$logger_name] = $this->_logging->logger($logger_name);
 			$this->_logger[$logger_name] = $this->_logging->psrLogger($logger_name);
 		}
 
@@ -141,11 +139,12 @@ class MY_Log extends CI_Log {
 	 *
 	 * Generally this function will be called using the global log_message() function
 	 *
-	 * @param	string			$level		The error level: 'error', 'debug' or 'info'
-	 * @param	string|array	$msg		The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	string	$level	The error level: 'error', 'debug' or 'info'
+	 * @param	string	$msg	The error message
+	 * @param	array	$data	The error logにJSONで出力する場合は連想配列で設定
 	 * @return	bool
 	 */
-	public function write_log($level, $msg)
+	public function write_log($level, $msg, $data = [])
 	{
 		// Loggingが無い、もしくは、Stackdriver を使用しない場合は、標準のLog出力を使用する
 		if (is_null($this->_logging) || $this->_use_stackdriver === FALSE) {
@@ -168,9 +167,7 @@ class MY_Log extends CI_Log {
 
 		// log書き込み
 		$logger = $this->_logger[$this->_logger_name];
-		//$logger->write($logger->entry($msg), ['severity' => $level]);
-		$msg = is_array($msg) ? json_encode($msg) : $msg;
-		$logger->log($level, $msg);
+		$logger->log($level, $msg, $data);
 
 		return TRUE;
 	}
@@ -180,12 +177,13 @@ class MY_Log extends CI_Log {
 	/**
 	 * error
 	 *
-	 * @param	string|array $msg  The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	string	$msg  	The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	array	$data	The error logにJSONで出力する場合は連想配列で設定
 	 * @return	bool
 	 */
-	public function error($msg)
+	public function error($msg, $data = [])
 	{
-		return self::write_log('ERROR', $msg);
+		return self::write_log('ERROR', $msg, $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -193,12 +191,13 @@ class MY_Log extends CI_Log {
 	/**
 	 * warning
 	 *
-	 * @param	string|array $msg  The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	string	$msg	The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	array	$data	The error logにJSONで出力する場合は連想配列で設定
 	 * @return	bool
 	 */
-	public function warning($msg)
+	public function warning($msg, $data = [])
 	{
-		return self::write_log('WARNING', $msg);
+		return self::write_log('WARNING', $msg, $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -206,12 +205,13 @@ class MY_Log extends CI_Log {
 	/**
 	 * debug
 	 *
-	 * @param	string|array $msg  The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	string	$msg	The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	array	$data	The error logにJSONで出力する場合は連想配列で設定
 	 * @return	bool
 	 */
-	public function debug($msg)
+	public function debug($msg, $data = [])
 	{
-		return self::write_log('DEBUG', $msg);
+		return self::write_log('DEBUG', $msg, $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -219,11 +219,12 @@ class MY_Log extends CI_Log {
 	/**
 	 * info
 	 *
-	 * @param	string|array $msg  The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	string	$msg	The error message logにデータをJSONで出力する場合は連想配列で設定
+	 * @param	array	$data	The error logにJSONで出力する場合は連想配列で設定
 	 * @return	bool
 	 */
-	public function info($msg)
+	public function info($msg, $data = [])
 	{
-		return self::write_log('INFO', $msg);
+		return self::write_log('INFO', $msg, $data);
 	}
 }

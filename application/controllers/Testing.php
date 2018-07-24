@@ -72,12 +72,12 @@ class Testing extends CI_Controller {
             'name' => 'abc',
             'item' => ['ZAQ', 'XSW', 'CDE'],
         ];
-        $this->log->debug(['msg' => '*** LOG TEST [log class] *** (DEBUG - json)', 'data' => $test_data]);
+        $this->log->debug('*** LOG TEST [log class] *** (DEBUG - json)', $test_data);
 
         // ここからother-appに書き込む
         $log = $this->log->logger('other-app');
         $log->debug('*** LOG TEST [log class] *** (DEBUG - other-app)');
-        $log->info('*** LOG TEST [log class] *** (INFO - other-app)');
+        $log->info('*** LOG TEST [log class] *** (INFO - other-app - json)', $test_data);
 
 
         // View
