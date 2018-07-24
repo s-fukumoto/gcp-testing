@@ -148,7 +148,7 @@ class MY_Log extends CI_Log {
 	{
 		// Loggingが無い、もしくは、Stackdriver を使用しない場合は、標準のLog出力を使用する
 		if (is_null($this->_logging) || $this->_use_stackdriver === FALSE) {
-			$msg = is_array($msg) ? json_encode($msg) : $msg;
+			$msg .= !empty($data) ? ' data --> '.json_encode($data) : '';
 			return parent::write_log($level, $msg);
 		}
 
